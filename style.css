@@ -1615,27 +1615,26 @@ section {
     line-height: 1.6;
 }
 
-.fb-feed-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 40px;
-    margin-top: 50px;
-    align-items: start;
+.fb-feed-wrapper-full {
+    max-width: 900px;
+    margin: 40px auto 0 auto;
 }
 
 .fb-page-embed-card {
     background: #ffffff;
-    border-radius: 20px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
-    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    border: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: center;
 }
 
 .fb-page-embed-card .fb-page,
 .fb-page-embed-card .fb-page span,
 .fb-page-embed-card .fb-page iframe {
     width: 100% !important;
-    min-height: 680px;
+    min-height: 750px;
 }
 
 .fb-follow-cta {
