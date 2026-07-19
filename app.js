@@ -159,30 +159,49 @@ document.addEventListener('DOMContentLoaded', () => {
             // Format message template
             const messageTemplate = `[ สนใจขอใบเสนอราคา / ประเมินหน้างานฟรี ]\nชื่อผู้ติดต่อ: ${name}\nเบอร์โทรศัพท์: ${phone}\nบริการที่สนใจ: ${interest}\nรายละเอียดเพิ่มเติม: ${note}`;
 
-            // URL Encode the message for safe browser redirect
-            const encodedMessage = encodeURIComponent(messageTemplate);
-
-            // Device Detection
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
-            if (isMobile) {
-                // For Mobile: Use direct message with text pre-fill (encode '@' as '%40')
-                const lineUrl = `https://line.me/R/oaMessage/%40210ngugq/?${encodedMessage}`;
-                window.location.href = lineUrl;
+            // Try copying formatting to clipboard
+            navigator.clipboard.writeText(messageTemplate).then(() => {
+                // Show custom modal
+                showCustomLineRedirectModal();
+            }).catch(err => {
+                // Fallback direct redirect if clipboard fails
+                window.location.href = `https://line.me/ti/p/%40210ngugq`;
                 contactForm.reset();
-            } else {
-                // For Desktop: Copy text automatically and show instruction, then open direct chat
-                navigator.clipboard.writeText(messageTemplate).then(() => {
-                    alert(`📋 คัดลอกข้อมูลการติดต่อของคุณแล้ว!\n\nระบบกำลังเปิดแชท LINE OA ของเรา กรุณากด "วาง" (Ctrl+V หรือคลิกขวา -> วาง) เพื่อส่งข้อมูลให้แอดมินประเมินราคาได้ทันทีครับ`);
-                    window.open('https://page.line.me/210ngugq', '_blank');
-                    contactForm.reset();
-                }).catch(err => {
-                    // Fallback if browser blocks clipboard
-                    alert(`ขอบคุณที่ติดต่อเรา!\n\nกรุณาส่งข้อความนี้หาแอดมินทาง LINE OA:\n\n${messageTemplate}`);
-                    window.open('https://page.line.me/210ngugq', '_blank');
-                    contactForm.reset();
-                });
-            }
+            });
+        });
+    }
+
+    // Modern Elegant Custom Modal for LINE redirect
+    function showCustomLineRedirectModal() {
+        const existing = document.getElementById('line-redirect-modal');
+        if (existing) existing.remove();
+
+        const modalHtml = `
+            <div id="line-redirect-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 99999; font-family: 'Outfit', 'Kanit', sans-serif;">
+                <div style="background: #ffffff; border-radius: 20px; width: 90%; max-width: 450px; padding: 40px 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="width: 70px; height: 70px; background: #e8f5e9; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+                        <svg viewBox="0 0 24 24" fill="#4CAF50" width="36" height="36"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    </div>
+                    <h3 style="font-size: 1.35rem; color: #0f172a; margin-bottom: 12px; font-weight: 700;">คัดลอกข้อมูลเรียบร้อยแล้ว!</h3>
+                    <p style="font-size: 0.95rem; color: #475569; line-height: 1.6; margin-bottom: 30px;">
+                        ระบบทำการบันทึกข้อมูลการติดต่อของคุณแล้ว<br>
+                        กรุณากด <strong>"วาง" (Paste / Ctrl+V)</strong> ในช่องแชท LINE<br>
+                        เพื่อส่งข้อมูลให้เจ้าหน้าที่เพื่อติดต่อประเมินราคาฟรีทันทีครับ
+                    </p>
+                    <button id="go-to-line-btn" style="background: #06C755; color: #ffffff; border: none; border-radius: 12px; width: 100%; padding: 16px; font-size: 1.05rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s ease;">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M24 10.3c0-5.7-5.4-10.3-12-10.3S0 4.6 0 10.3c0 5.1 4.3 9.3 10.1 10.1.4.1.9.4.9.9v2.2c0 .5.3.6.6.4l3.1-2.9c3.9-.9 9.3-3.6 9.3-10.7z"/></svg>
+                        เปิดหน้าแชท LINE
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+        document.getElementById('go-to-line-btn').addEventListener('click', () => {
+            // Redirect directly to the LINE OA add friend / chat page (Works 100% on both Mobile and PC)
+            window.open('https://line.me/ti/p/%40210ngugq', '_blank');
+            document.getElementById('line-redirect-modal').remove();
         });
     }
 
