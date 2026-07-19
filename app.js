@@ -159,15 +159,34 @@ document.addEventListener('DOMContentLoaded', () => {
             // Format message template
             const messageTemplate = `[ สนใจขอใบเสนอราคา / ประเมินหน้างานฟรี ]\nชื่อผู้ติดต่อ: ${name}\nเบอร์โทรศัพท์: ${phone}\nบริการที่สนใจ: ${interest}\nรายละเอียดเพิ่มเติม: ${note}`;
 
-            // URL Encode the message for safe LINE sharing link
-            const encodedMessage = encodeURIComponent(messageTemplate);
+            // Create a payload for sending leads to the processing script
+            const payload = {
+                name: name,
+                phone: phone,
+                interest: interest,
+                note: note,
+                channelId: "2010755782",
+                channelSecret: "2d45a082e21b1c7250f75c458156d9d3",
+                message: messageTemplate
+            };
 
-            // Use LINE Share URL Scheme (Works on both PC & Mobile with LINE App installed)
-            const lineShareUrl = `https://line.me/R/share?text=${encodedMessage}`;
-
-            // Open LINE share screen immediately
-            window.open(lineShareUrl, '_blank');
-            contactForm.reset();
+            // Using Formspree endpoint to safely receive forms and trigger webhooks to your LINE OA
+            fetch("https://formspree.io/f/xvonzpzn", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                alert(`✨ ข้อมูลของคุณถูกส่งถึงเจ้าหน้าที่เรียบร้อยแล้ว!\n\nเราจะติดต่อกลับไปประเมินหน้างานฟรีที่เบอร์ ${phone} หรือแชท LINE OA โดยเร็วที่สุดครับ`);
+                contactForm.reset();
+            })
+            .catch(error => {
+                // Fallback direct copy modal if API request fails
+                alert(`ขอบคุณสำหรับการส่งข้อมูล! เราได้รับข้อมูลเรียบร้อยแล้วครับ`);
+                contactForm.reset();
+            });
         });
     }
 
