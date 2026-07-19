@@ -162,16 +162,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // URL Encode the message for safe browser redirect
             const encodedMessage = encodeURIComponent(messageTemplate);
 
-            // Use LINE Direct Message URL Scheme (Must encode '@' as '%40')
-            const lineUrl = `https://line.me/R/oaMessage/%40116ozhwx/?${encodedMessage}`;
+            // Use LINE Direct Message URL Scheme with the test account (Must encode '@' as '%40')
+            const lineUrl = `https://line.me/R/oaMessage/%40210ngugq/?${encodedMessage}`;
 
-            // Try opening in a new tab first (triggers native app on mobile)
-            const newWindow = window.open(lineUrl, '_blank');
-            
-            // If pop-up is blocked or it fails to open, fallback to location href
-            if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-                window.location.href = lineUrl;
-            }
+            // Enforce direct location change to prevent popup blocker blocking on Safari/Chrome
+            window.location.href = lineUrl;
             contactForm.reset();
         });
     }
