@@ -165,8 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 phone: phone,
                 interest: interest,
                 note: note,
-                channelId: "2010755782",
-                channelSecret: "2d45a082e21b1c7250f75c458156d9d3",
                 message: messageTemplate
             };
 
