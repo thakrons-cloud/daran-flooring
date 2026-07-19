@@ -165,18 +165,24 @@ document.addEventListener('DOMContentLoaded', () => {
             // Device Detection
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             
-            let lineUrl;
             if (isMobile) {
                 // For Mobile: Use direct message with text pre-fill (encode '@' as '%40')
-                lineUrl = `https://line.me/R/oaMessage/%40210ngugq/?${encodedMessage}`;
+                const lineUrl = `https://line.me/R/oaMessage/%40210ngugq/?${encodedMessage}`;
+                window.location.href = lineUrl;
+                contactForm.reset();
             } else {
-                // For Desktop: Fallback to direct Page LINE URL which triggers direct PC chat
-                lineUrl = `https://page.line.me/210ngugq`;
+                // For Desktop: Copy text automatically and show instruction, then open direct chat
+                navigator.clipboard.writeText(messageTemplate).then(() => {
+                    alert(`📋 คัดลอกข้อมูลการติดต่อของคุณแล้ว!\n\nระบบกำลังเปิดแชท LINE OA ของเรา กรุณากด "วาง" (Ctrl+V หรือคลิกขวา -> วาง) เพื่อส่งข้อมูลให้แอดมินประเมินราคาได้ทันทีครับ`);
+                    window.open('https://page.line.me/210ngugq', '_blank');
+                    contactForm.reset();
+                }).catch(err => {
+                    // Fallback if browser blocks clipboard
+                    alert(`ขอบคุณที่ติดต่อเรา!\n\nกรุณาส่งข้อความนี้หาแอดมินทาง LINE OA:\n\n${messageTemplate}`);
+                    window.open('https://page.line.me/210ngugq', '_blank');
+                    contactForm.reset();
+                });
             }
-
-            // Enforce location redirect
-            window.location.href = lineUrl;
-            contactForm.reset();
         });
     }
 
