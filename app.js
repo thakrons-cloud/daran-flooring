@@ -162,10 +162,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // URL Encode the message for safe browser redirect
             const encodedMessage = encodeURIComponent(messageTemplate);
 
-            // Use LINE Direct Message URL Scheme with the test account (Must encode '@' as '%40')
-            const lineUrl = `https://line.me/R/oaMessage/%40210ngugq/?${encodedMessage}`;
+            // Device Detection
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            let lineUrl;
+            if (isMobile) {
+                // For Mobile: Use direct message with text pre-fill (encode '@' as '%40')
+                lineUrl = `https://line.me/R/oaMessage/%40210ngugq/?${encodedMessage}`;
+            } else {
+                // For Desktop: Fallback to standard URL scheme that works on PC browsers
+                lineUrl = `https://line.me/ti/p/%40210ngugq`;
+            }
 
-            // Enforce direct location change to prevent popup blocker blocking on Safari/Chrome
+            // Enforce location redirect
             window.location.href = lineUrl;
             contactForm.reset();
         });
