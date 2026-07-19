@@ -170,22 +170,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 message: messageTemplate
             };
 
-            // Using Formspree endpoint to safely receive forms and trigger webhooks to your LINE OA
-            fetch("https://formspree.io/f/xvonzpzn", {
+            // Using Google Apps Script Web App to log to Sheet & send message to LINE OA
+            fetch("https://script.google.com/macros/s/AKfycbzUf0vPzNNItms37sHWW8vIPsp92kuxDk-t_Q4ZXxm6aEx_btBdoa4Fg-diN3U-WmVZRw/exec", {
                 method: "POST",
+                mode: "no-cors", // Required to bypass Google redirection CORS blocks in static sites
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(payload)
             })
-            .then(response => {
-                alert(`✨ ข้อมูลของคุณถูกส่งถึงเจ้าหน้าที่เรียบร้อยแล้ว!\n\nเราจะติดต่อกลับไปประเมินหน้างานฟรีที่เบอร์ ${phone} หรือแชท LINE OA โดยเร็วที่สุดครับ`);
+            .then(() => {
+                alert(`✨ ส่งข้อมูลการติดต่อเรียบร้อยแล้ว!\n\nข้อมูลของคุณถูกบันทึกและส่งตรงไปยังแอดมิน LINE OA เรียบร้อยแล้วครับ เจ้าหน้าที่จะทำการติดต่อกลับโดยเร็วที่สุดครับ.`);
                 contactForm.reset();
             })
-            .catch(error => {
-                // Fallback direct copy modal if API request fails
-                alert(`ขอบคุณสำหรับการส่งข้อมูล! เราได้รับข้อมูลเรียบร้อยแล้วครับ`);
-                contactForm.reset();
             });
         });
     }
