@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const serviceModalDesc = document.getElementById('s-modal-desc');
     const serviceModalTimeline = document.getElementById('s-steps-timeline');
 
-    // Request Form Handling (Redirect to LINE OA with Autocopy Lead Details)
+    // Request Form Handling (Redirect to LINE OA with Auto-Filled Message)
     const contactForm = document.getElementById('contact-lead-form');
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
@@ -159,19 +159,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Format message template
             const messageTemplate = `[ สนใจขอใบเสนอราคา / ประเมินหน้างานฟรี ]\nชื่อผู้ติดต่อ: ${name}\nเบอร์โทรศัพท์: ${phone}\nบริการที่สนใจ: ${interest}\nรายละเอียดเพิ่มเติม: ${note}`;
 
-            // Try copying formatting to clipboard
-            navigator.clipboard.writeText(messageTemplate).then(() => {
-                alert(`📋 คัดลอกข้อมูลการติดต่อของคุณแล้ว!\n\nระบบจะพาคุณไปยังหน้าแชท LINE OA ของ Daran Flooring เพื่อกด "วาง (Paste)" และส่งข้อมูลนี้หาแอดมินโดยตรงเพื่อตอบกลับและประเมินราคาทันทีครับ`);
-                
-                // Redirect to Daran Flooring LINE OA Link
-                window.open('https://line.me/ti/p/@116ozhwx', '_blank');
-                contactForm.reset();
-            }).catch(err => {
-                // Fallback in case clipboard API block
-                alert(`ขอบคุณคุณ ${name} ที่สนใจบริการ ${interest}!\n\nกรุณาแคปหน้าจอนี้ หรือส่งข้อมูลนี้หาเราทาง LINE OA: "${interest} - ${phone}"`);
-                window.open('https://line.me/ti/p/@116ozhwx', '_blank');
-                contactForm.reset();
-            });
+            // URL Encode the message for safe browser redirect
+            const encodedMessage = encodeURIComponent(messageTemplate);
+
+            // Use LINE Direct Message URL Scheme to auto-fill the chat box
+            const lineUrl = `https://line.me/R/oaMessage/@116ozhwx/?${encodedMessage}`;
+
+            // Redirect immediately
+            window.open(lineUrl, '_blank');
+            contactForm.reset();
         });
     }
 
