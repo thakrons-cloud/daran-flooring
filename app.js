@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             // Using Google Apps Script Web App to log to Sheet & send message to LINE OA
-            fetch("https://script.google.com/macros/s/AKfycbz1EC7XKiSIgoUm_hx44RjCBz_u-qc4VfkDv2jSWJ_3Y1WWXEBdc4n-PNl9-xaAR7MbAQ/exec", {
+            fetch("https://script.google.com/macros/s/AKfycbwsuPYGsKrmrKZSKdV2dvXzNCCCN5vQM3UqyNpPCdMjSpyZFxJXTBME5NIngp6dbRbUIw/exec", {
                 method: "POST",
                 mode: "no-cors", // Required to bypass Google redirection CORS blocks in static sites
                 headers: {
