@@ -175,14 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: "POST",
                 mode: "no-cors", // Required to bypass Google redirection CORS blocks in static sites
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "text/plain;charset=utf-8"
                 },
                 body: JSON.stringify(payload)
             })
             .then(() => {
                 alert(`✨ ส่งข้อมูลการติดต่อเรียบร้อยแล้ว!\n\nข้อมูลของคุณถูกบันทึกและส่งตรงไปยังแอดมิน LINE OA เรียบร้อยแล้วครับ เจ้าหน้าที่จะทำการติดต่อกลับโดยเร็วที่สุดครับ.`);
                 contactForm.reset();
-            })
             });
         });
     }
