@@ -162,11 +162,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // URL Encode the message for safe browser redirect
             const encodedMessage = encodeURIComponent(messageTemplate);
 
-            // Use LINE Direct Message URL Scheme to auto-fill the chat box
-            const lineUrl = `https://line.me/R/oaMessage/@116ozhwx/?${encodedMessage}`;
+            // Use LINE Direct Message URL Scheme (Must encode '@' as '%40')
+            const lineUrl = `https://line.me/R/oaMessage/%40116ozhwx/?${encodedMessage}`;
 
-            // Redirect immediately
-            window.open(lineUrl, '_blank');
+            // Try opening in a new tab first (triggers native app on mobile)
+            const newWindow = window.open(lineUrl, '_blank');
+            
+            // If pop-up is blocked or it fails to open, fallback to location href
+            if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                window.location.href = lineUrl;
+            }
             contactForm.reset();
         });
     }
