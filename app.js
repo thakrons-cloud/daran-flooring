@@ -170,8 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // For Mobile: Use direct message with text pre-fill (encode '@' as '%40')
                 lineUrl = `https://line.me/R/oaMessage/%40210ngugq/?${encodedMessage}`;
             } else {
-                // For Desktop: Fallback to standard URL scheme that works on PC browsers
-                lineUrl = `https://line.me/ti/p/%40210ngugq`;
+                // For Desktop: Fallback to direct Page LINE URL which triggers direct PC chat
+                lineUrl = `https://page.line.me/210ngugq`;
             }
 
             // Enforce location redirect
