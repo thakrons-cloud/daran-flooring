@@ -146,6 +146,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const serviceModalDesc = document.getElementById('s-modal-desc');
     const serviceModalTimeline = document.getElementById('s-steps-timeline');
 
+    // Request Form Handling (Redirect to LINE OA with Autocopy Lead Details)
+    const contactForm = document.getElementById('contact-lead-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const interest = document.getElementById('interest').options[document.getElementById('interest').selectedIndex].text;
+            const note = document.getElementById('note').value || 'ไม่มีรายละเอียดเพิ่มเติม';
+
+            // Format message template
+            const messageTemplate = `[ สนใจขอใบเสนอราคา / ประเมินหน้างานฟรี ]\nชื่อผู้ติดต่อ: ${name}\nเบอร์โทรศัพท์: ${phone}\nบริการที่สนใจ: ${interest}\nรายละเอียดเพิ่มเติม: ${note}`;
+
+            // Try copying formatting to clipboard
+            navigator.clipboard.writeText(messageTemplate).then(() => {
+                alert(`📋 คัดลอกข้อมูลการติดต่อของคุณแล้ว!\n\nระบบจะพาคุณไปยังหน้าแชท LINE OA ของ Daran Flooring เพื่อกด "วาง (Paste)" และส่งข้อมูลนี้หาแอดมินโดยตรงเพื่อตอบกลับและประเมินราคาทันทีครับ`);
+                
+                // Redirect to Daran Flooring LINE OA Link
+                window.open('https://line.me/ti/p/@116ozhwx', '_blank');
+                contactForm.reset();
+            }).catch(err => {
+                // Fallback in case clipboard API block
+                alert(`ขอบคุณคุณ ${name} ที่สนใจบริการ ${interest}!\n\nกรุณาแคปหน้าจอนี้ หรือส่งข้อมูลนี้หาเราทาง LINE OA: "${interest} - ${phone}"`);
+                window.open('https://line.me/ti/p/@116ozhwx', '_blank');
+                contactForm.reset();
+            });
+        });
+    }
+
     window.openServiceModal = function(serviceId) {
         const service = servicesData[serviceId];
         if (!service) return;
@@ -384,19 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Request Form Handling
-    const contactForm = document.getElementById('contact-lead-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const interest = document.getElementById('interest').options[document.getElementById('interest').selectedIndex].text;
 
-            alert(`ขอบคุณคุณ ${name} ที่ลงทะเบียนติดต่อกับ Daran Flooring!\n\nเจ้าหน้าที่ได้รับเรื่องความสนใจในบริการ "${interest}" แล้ว จะทำการโทรกลับประเมินหน้างานฟรีที่เบอร์ ${phone} โดยเร็วที่สุดครับ.`);
-            contactForm.reset();
-        });
-    }
 
     // Scroll Intersection Observer for fade-in animations
     const observerOptions = {
